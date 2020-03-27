@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+
+{% block title%}
+User Profile
+{% endblock title%}
+
+{% block content %}
+<h2> Welcome to {{ user.username }}'s profile </h2>
+
+<p><a href="{% url 'user_drafts' username=user.username %}">go to user drafts </a></p>
+{% endblock content %}
