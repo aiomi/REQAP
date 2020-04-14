@@ -4,7 +4,13 @@
 
 {% block content %}
 <h2> Homepage</h2>
-<a href="{% url 'register' %}">register</a>
-<a href="{% url 'login' %}">login</a>
+{% if request.user.is_authenticated %}
+    <a href="{% url 'make-request' %}">make request</a>
+    <a href="{% url 'logout' %}">logout</a>
+{% else %}
+    <a href="{% url 'register' %}">register</a>
+    <a href="{% url 'login' %}">login</a>
+{% endif %}
+
 {# <a href="{% url 'user-profile' %}">My profile </a> #}
 {% endblock content %}
