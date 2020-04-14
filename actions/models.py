@@ -5,7 +5,11 @@ from users.models import User
 
 
 class Request(models.Model):
-    #request_type
+    request_types = (
+        ('leave', 'Leave'),
+        ('transcripts', 'Transcripts'),
+        )
+    request_type = models.CharField(choices=request_types, default=request_types, max_length=18)
     request_date = models.DateTimeField(default=None)
     approved_by = models.ManyToManyField(User, through='Action')
 
