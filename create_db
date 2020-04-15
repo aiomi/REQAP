@@ -1,0 +1,10 @@
+sudo su postgres -c "psql -c \"CREATE USER reqap WITH PASSWORD 'reqap';\""
+
+sudo su postgres -c "psql -c \"CREATE DATABASE reqap_db OWNER reqap;\""
+
+sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis;\""
+
+sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis_topology;\""
+
+
+sudo su postgres -c "psql -c \"DROP DATABASE reqap_db;\""
