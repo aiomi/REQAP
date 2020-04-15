@@ -18,15 +18,16 @@ class Request(models.Model):
 
 class TranscriptAttribute(models.Model):
     transcript_type = models.CharField(max_length=20)
-    amount = models.DecimalField(max_digits=6, decimal_places=2)
+    amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
 
     def __str__(self):
         return f'{self.transcript_type} costs {self.amount}'
 
 class Transcript(models.Model):
     transcript_type = models.OneToOneField(TranscriptAttribute, on_delete=models.DO_NOTHING)
-    amount = models.DecimalField(max_digits=6, decimal_places=2)
+    amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     requires_payment = models.BooleanField(default=True)
+    address = models.CharField(max_length=200, null=True)
     request = models.OneToOneField(Request, on_delete=models.CASCADE)
     has_paid = models.BooleanField(default=False)
 
