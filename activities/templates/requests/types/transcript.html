@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Transcript
+{% endblock title%}
+
+{% block content %}
+<h2>Request for Transcript {{req.transcript_type}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+{% endblock content %}

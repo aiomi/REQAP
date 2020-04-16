@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title%}
+User Profile
+{% endblock title%}
+
+{% block content %}
+<h2> Welcome to {{ request.user }}'s profile </h2>
+
+<h2>Make Requests</h2>
+<a href="{% url 'transcript-request' %}">make transcript request</a>
+
+<p></p>
+<hr>
+<h3>View requests</h3>
+{% for req in requests %}
+   {%if req.transcript%}
+   <a href="{% url 'view-request-transcripts' req.transcript.id %}">{{req.transcript}}</a> 
+   {%endif%}
+{%endfor%}
+{% endblock content %}

@@ -4,7 +4,9 @@ from django.utils import decorators
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import TranscriptAttribute, Request
+from .models import (
+    TranscriptAttribute, Request, Transcript
+    )
 from .form import TranscriptRequestForm
 # Create your views here.
 
@@ -26,7 +28,7 @@ def request_transcripts(request):
             return redirect('homepage')
     form = TranscriptRequestForm(None)
     context = {'Title':"Transcript Request", 'form':form}
-    return render(request, 'make_request.html', context=context)
+    return render(request, 'requests/make_request.html', context=context)
 
 
 def get_transcript_amount(request):
@@ -36,3 +38,9 @@ def get_transcript_amount(request):
         amount = TranscriptAttribute.objects.get(transcript_type=ttype).amount
         return HttpResponse(amount)
     return HttpResponse('none')
+
+
+def view_requests_transcripts(request, pk):
+    req = Transcript.objects.get(pk=pk)
+    context = {'req':req}
+    return render(request, 'requests/types/transcript.html', context=context)
