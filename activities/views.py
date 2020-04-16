@@ -4,7 +4,7 @@ from django.utils import decorators
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
-from .models import TranscriptAttribute
+from .models import TranscriptAttribute, Request
 from .form import TranscriptRequestForm
 # Create your views here.
 
@@ -17,7 +17,11 @@ def request_transcripts(request):
     if request.method == "POST":
         form = TranscriptRequestForm(request.POST or None)
         if form.is_valid():
-            form.save()
+            req = form.save(commit=False)
+            _ = Request.objects.create(user = request.user)
+            req.request = _
+            #req.request.user = request.user
+            req.save()
             messages.success(request, 'Your request for Transcript has been successful')
             return redirect('homepage')
     form = TranscriptRequestForm(None)
