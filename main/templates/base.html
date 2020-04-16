@@ -1,3 +1,4 @@
+{% load static %}
 <html lang="en">
 <head>
     <meta charset="UTF-8">
@@ -15,6 +16,7 @@
 
     {% endblock content %}
     
+    <script src="{% static 'js/jquery.min.js' %}"></script>
     {% block js%}
     {% endblock js%}
 </body>

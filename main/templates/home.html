@@ -5,7 +5,7 @@
 {% block content %}
 <h2> Homepage</h2>
 {% if request.user.is_authenticated %}
-    <a href="{% url 'make-request' %}">make request</a>
+    <a href="{% url 'transcript-request' %}">make transcript request</a>
     <a href="{% url 'logout' %}">logout</a>
 {% else %}
     <a href="{% url 'register' %}">register</a>

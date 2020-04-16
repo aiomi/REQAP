@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Make-{{ Title }}
+{% endblock title%}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <input type="submit" name="" id="" >
+</form>
+{% endblock content %}
+
+{% block js%}
+
+{% endblock js%}
