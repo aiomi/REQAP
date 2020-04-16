@@ -25,3 +25,10 @@ def request_transcripts(request):
     return render(request, 'make_request.html', context=context)
 
 
+def get_transcript_amount(request):
+
+    if request.is_ajax():
+        ttype = request.POST.get('transcipt_type')
+        amount = TranscriptAttribute.objects.get(transcript_type=ttype).amount
+        return HttpResponse(amount)
+    return HttpResponse('none')
