@@ -1,7 +1,7 @@
 from django.db import models
 from django.utils import timezone
-
-from users.models import User
+from django.contrib.auth.models import Group
+from users.models import User, Staff
 # Create your models here.
 
 
@@ -24,12 +24,21 @@ class TranscriptAttribute(models.Model):
         return f'{self.transcript_type}'
 
 class Transcript(models.Model):
+    # will have status approve or deny
+    # after an instance is created it will send an email to a user in that group
+    # to approve the request hence filing the approved_by with the staff
+    # #
     transcript_type = models.OneToOneField(TranscriptAttribute, on_delete=models.DO_NOTHING)
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     requires_payment = models.BooleanField(default=True)
     address = models.CharField(max_length=200, null=True)
     request = models.OneToOneField(Request, on_delete=models.CASCADE, null=True, blank=True)
     has_paid = models.BooleanField(default=False)
+    approved_by = models.OneToOneField(Staff, on_delete=models.CASCADE, blank=True,null=True)
+    class Meta:
+        permissions = [
+            ('change_status', 'can change the status of a request to accept or rejected'),
+        ]
 
     def __str__(self):
         return f'Transcript {self.transcript_type} by {self.request.user}'
