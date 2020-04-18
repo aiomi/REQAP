@@ -39,8 +39,10 @@ def get_transcript_amount(request):
         return HttpResponse(amount)
     return HttpResponse('none')
 
-
+@login_required
 def view_requests_transcripts(request, pk):
     req = Transcript.objects.get(pk=pk)
     context = {'req':req}
-    return render(request, 'requests/types/transcript.html', context=context)
+    return render(
+        request, 'requests/transcript/view_transcript_request.html',
+        context=context)
