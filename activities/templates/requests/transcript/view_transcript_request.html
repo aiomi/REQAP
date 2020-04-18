@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Transcript
+{% endblock title%}
+
+{% block content %}
+{%if request.user == req.request.user%}
+Student
+<h2>Request for Transcript {{req.transcript_type}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+{%endif%}
+
+
+{%if request.user.is_teacher %}
+Staff
+<h2>Request for Transcript {{req.transcript_type}} by {{req.request.user.first_name}} {{req.request.user.last_name}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+<h2>approve and reject with possible reasons</h2>
+{%endif%}
+
+{% endblock content %}

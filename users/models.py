@@ -4,8 +4,8 @@ from django.contrib.auth.models import AbstractUser, Group
 
 class User(AbstractUser):
     
-    faculty = models.CharField(max_length=12)
-    department = models.CharField(max_length=65)
+    faculty = models.CharField(max_length=12, blank=True, null=True)
+    department = models.CharField(max_length=65, blank=True, null=True)
 
     is_teacher = models.BooleanField(default=False)
     is_student = models.BooleanField(default=False)
@@ -13,7 +13,7 @@ class User(AbstractUser):
 
 
     def __str__(self):
-        return f'User: {self.first_name}'
+        return f'{self.username}'
 
 class Staff(models.Model):
 

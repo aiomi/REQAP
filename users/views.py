@@ -19,7 +19,10 @@ def register(request):
 
 @login_required
 def profile(request, username):
+    # s_user_req means specific user requests which is all the request made
+    # by the currently logged in user
+    s_user_req = Request.objects.filter(user=request.user)
     requests = Request.objects.all()
-    context = {'requests':requests}
+    context = {'requests':requests, 'specific':s_user_req}
     return render(request, 'profile.html', context=context)
 
