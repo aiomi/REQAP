@@ -27,20 +27,20 @@ class Staff(models.Model):
 
     
 
-# class StaffVerification(models.Model):
-#     staff = models.OneToOneField(Staff, on_delete=models.CASCADE)
-#     selfie = models.ImageField(upload_to='staffs', blank=True, null=True)
-#     id_card = models.ImageField(upload_to='staffs', blank=True, null=True)
-#     is_verified = models.BooleanField(default=False)
+class StaffVerification(models.Model):
+    staff = models.OneToOneField(Staff, on_delete=models.CASCADE)
+    selfie = models.ImageField(upload_to='staffs', blank=True, null=True)
+    id_card = models.ImageField(upload_to='staffs', blank=True, null=True)
+    is_verified = models.BooleanField(default=False)
 
-#     def save(self):
-#         super().save()
-#         img = Image.open(self.selfie.path)
-#         if img.height > 500 or img.width > 500:
-#             output_size = (500,500)
-#             img.save(self.img.path)
+    def save(self):
+        super().save()
+        img = Image.open(self.selfie.path)
+        if img.height > 500 or img.width > 500:
+            output_size = (500,500)
+            img.save(self.img.path)
 
-#         img_ = Image.open(self.id_card.path)
-#         if img_.height > 500 or img_.width > 500:
-#             output_size = (500,500)
-#             img_.save(self.img_.path)
+        img_ = Image.open(self.id_card.path)
+        if img_.height > 500 or img_.width > 500:
+            output_size = (500,500)
+            img_.save(self.img_.path)
