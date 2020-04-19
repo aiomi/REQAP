@@ -1,7 +1,9 @@
 from django.shortcuts import render, redirect
+from django.views.generic import CreateView
+from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from .models import User
-from .forms import UserRegistrationForm
+from .forms import UserRegistrationForm, TeacherSignUpForm
 
 from activities.models import Request
 # Create your views here.
@@ -15,6 +17,16 @@ def register(request):
         return redirect('login')
     context = {'form':form}
     return render(request, 'registration/register.html', context=context)
+
+class TeacherSignUpView(CreateView):
+    form_class = TeacherSignUpForm
+    model = User
+    template_name = 'registration/register.html'
+
+    def form_valid(self, form):
+        user = form.save()
+        login(self.request, user)
+        return redirect('homepage')
 
 
 @login_required

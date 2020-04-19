@@ -11,6 +11,10 @@ urlpatterns = [
     path('', include('django.contrib.auth.urls')),
     path('register/', views.register, name='register'),
     
+    path(
+        'register/staff',
+        views.TeacherSignUpView.as_view(), name='teacher-registration'),
+    
     path('dashboard/<str:username>', views.profile, name='user-profile')
 
 ]
