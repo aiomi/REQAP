@@ -23,7 +23,7 @@ class Staff(models.Model):
     office = models.ForeignKey(Group, on_delete=models.DO_NOTHING, blank=True, null=True)
 
     def __str__(self):
-        return f'staff {self.user.first_name}'
+        return f'staff {self.user.username}'
 
     
 
@@ -33,14 +33,19 @@ class StaffVerification(models.Model):
     id_card = models.ImageField(upload_to='staffs', blank=True, null=True)
     is_verified = models.BooleanField(default=False)
 
-    def save(self):
-        super().save()
+    def __str__(self):
+        return f'{self.staff.user.username} verification files'
+
+
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)
+        
         img = Image.open(self.selfie.path)
-        if img.height > 500 or img.width > 500:
-            output_size = (500,500)
-            img.save(self.img.path)
+        if img.height > 300 or img.width > 300:
+            output_size = (300,300)
+            img.save(self.selfie.path)
 
         img_ = Image.open(self.id_card.path)
         if img_.height > 500 or img_.width > 500:
             output_size = (500,500)
-            img_.save(self.img_.path)
+            img_.save(self.id_card.path)
