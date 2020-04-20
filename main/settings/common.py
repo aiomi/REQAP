@@ -116,3 +116,8 @@ AUTH_USER_MODEL = 'users.User'
 LOGIN_REDIRECT_URL = 'homepage'
 LOGIN_URL = 'login'
 LOGOUT_REDIRECT_URL = 'homepage'
+
+# Email 
+TEACHER_SIGNUP_SUBJECT = "Sign Up as Teacher Successful"
+
+ADMIN_EMAIL_USER = 'Greatness@gmail.com'
