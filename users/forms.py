@@ -1,8 +1,12 @@
 from django.contrib.auth.forms import UserCreationForm
+from django.shortcuts import reverse
 from django.db import transaction
+from django.contrib.sites.shortcuts import get_current_site
+from django.conf import settings
+from django.template import loader
 from django import forms
-
-from .models import User, Staff
+from django.core.mail import send_mail
+from .models import User, Staff, StaffVerification
 
 
 class UserRegistrationForm(UserCreationForm):
@@ -44,5 +48,29 @@ class TeacherSignUpForm(UserCreationForm):
         user.is_teacher = True
         user.is_active = False
         user.save()
-        Staff.objects.create(user=user)
+        staff = Staff.objects.create(user=user)
+        html_ = loader.render_to_string(
+            'email/staff_verify_email.html',
+            {
+                'user':user,
+                'subject':settings.TEACHER_SIGNUP_SUBJECT,
+                'staff':staff
+            }
+            )
+        send_mail(
+            settings.TEACHER_SIGNUP_SUBJECT, '',
+            settings.ADMIN_EMAIL_USER, [user.email],
+            fail_silently=True,html_message=html_
+            )
         return user
+
+
+class StaffVerificationForm(forms.ModelForm):
+
+    def save(self, commit=True):
+        verification = super().save(commit=False)
+        verification.staff = self.request.user.staff
+        verification.save()
+    class Meta:
+        model = StaffVerification
+        fields = ['selfie', 'id_card']

@@ -2,8 +2,11 @@ from django.shortcuts import render, redirect
 from django.views.generic import CreateView
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import User
-from .forms import UserRegistrationForm, TeacherSignUpForm
+from .models import User, StaffVerification
+from .forms import (
+    UserRegistrationForm, TeacherSignUpForm,
+    StaffVerificationForm
+    )
 
 from activities.models import Request
 # Create your views here.
@@ -28,6 +31,14 @@ class TeacherSignUpView(CreateView):
         login(self.request, user)
         return redirect('homepage')
 
+class StaffVerificationView(CreateView):
+    form_class = StaffVerificationForm
+    model = StaffVerification
+    template_name = 'registration/staff_verify.html'
+
+    def form_valid(self, form):
+        form.save()
+        return redirect('homepage')
 
 @login_required
 def profile(request, username):

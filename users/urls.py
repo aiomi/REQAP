@@ -15,8 +15,14 @@ urlpatterns = [
     
     path(
         'register/staff',
-        views.TeacherSignUpView.as_view(), name='teacher-registration'),
+        views.TeacherSignUpView.as_view(), name='teacher-registration'
+        ),
     
+    path(
+        'staff_verify/<int:pk>',
+        views.StaffVerificationView.as_view(),
+        name='staff-verification'
+        ),
     path('dashboard/<str:username>', views.profile, name='user-profile')
 
 ]
