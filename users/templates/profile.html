@@ -17,7 +17,7 @@ User Profile
 
 <!--for none staffs show all the particular user requests-->
 {% if not request.user.is_teacher %}
-   {% for req in specifics %}
+   {% for req in specific %}
       {%if req.transcript%}
       <a href="{% url 'view-request-transcripts' req.transcript.id %}">{{req.transcript}}</a> 
       {%endif%}
@@ -26,7 +26,8 @@ User Profile
 <!-- for staffs show requests of all users -->
 {% else%}
 <h2>
-   For staffs only
+   <!--TODO: make logic to allow only academic office users see this -->
+   For staffs only(In academic office)
 </h2>
    {% for req in requests %}
       {%if req.transcript%}
