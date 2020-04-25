@@ -5,9 +5,10 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
 from .models import (
-    TranscriptAttribute, Request, Transcript
+    TranscriptAttribute, Request, Transcript,
+    Note
     )
-from .form import TranscriptRequestForm
+from .form import TranscriptRequestForm, NoteForm
 # Create your views here.
 
 def homepage(request):
@@ -42,7 +43,23 @@ def get_transcript_amount(request):
 @login_required
 def view_requests_transcripts(request, pk):
     req = Transcript.objects.get(pk=pk)
-    context = {'req':req}
+    form = NoteForm()
+    context = {'req':req, 'form':form}
     return render(
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
+
+#should require only staffs from academic offices
+# or staff who has permission of academic office
+@login_required
+def respond_to_transcript_request(request):
+    """
+    either a transcript request is accepted or rejected,
+    either way we handle both cases
+    """
+    if request.is_ajax():
+        #Note.objects.create()
+        print(request.GET)
+        print(request.POST)
+        return True
+    return False
