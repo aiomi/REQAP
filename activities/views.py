@@ -8,6 +8,8 @@ from .models import (
     TranscriptAttribute, Request, Transcript,
     Note
     )
+
+from users.models import Staff
 from .form import TranscriptRequestForm, NoteForm
 # Create your views here.
 
@@ -58,8 +60,15 @@ def respond_to_transcript_request(request):
     either way we handle both cases
     """
     if request.is_ajax():
-        #Note.objects.create()
-        print(request.GET)
+        
+        request_instance = Request.objects.get(id=int(request.POST.get('req_id')))
+        staff_instance = Staff.objects.get(id = request.user.staff.id) 
+        Note.objects.create(
+            request= request_instance,
+            action = request.POST.get('action'),
+            reason = request.POST.get('reason'),
+            staff_id = staff_instance
+        )
         print(request.POST)
-        return True
-    return False
+
+        return JsonResponse(data={'response':'successful'})
