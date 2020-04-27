@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
-from django.utils import decorators
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 
@@ -11,6 +10,8 @@ from .models import (
 
 from users.models import Staff
 from .form import TranscriptRequestForm, NoteForm
+
+from users.decorators import user_is_student_or_acadoffice_staff
 # Create your views here.
 
 def homepage(request):
@@ -43,7 +44,8 @@ def get_transcript_amount(request):
     return HttpResponse('none')
 
 @login_required
-def view_requests_transcripts(request, pk):
+@user_is_student_or_acadoffice_staff
+def view_request_transcript(request, pk):
     req = Transcript.objects.get(pk=pk)
     form = NoteForm()
     context = {'req':req, 'form':form}
@@ -54,6 +56,7 @@ def view_requests_transcripts(request, pk):
 #should require only staffs from academic offices
 # or staff who has permission of academic office
 @login_required
+@user_is_student_or_acadoffice_staff
 def respond_to_transcript_request(request):
     """
     either a transcript request is accepted or rejected,
