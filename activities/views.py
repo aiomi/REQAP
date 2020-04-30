@@ -11,7 +11,8 @@ from .models import (
 from users.models import Staff
 from .form import TranscriptRequestForm, NoteForm
 
-from users.decorators import user_is_student_or_acadoffice_staff
+from users.decorators import (
+    user_is_student_or_acadoffice_staff, academic_office_staff_only)
 # Create your views here.
 
 def homepage(request):
@@ -53,10 +54,9 @@ def view_request_transcript(request, pk):
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
 
-#should require only staffs from academic offices
-# or staff who has permission of academic office
+
 @login_required
-@user_is_student_or_acadoffice_staff
+@academic_office_staff_only
 def respond_to_transcript_request(request):
     """
     either a transcript request is accepted or rejected,
