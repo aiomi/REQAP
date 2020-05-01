@@ -7,7 +7,7 @@ from .forms import (
     UserRegistrationForm, TeacherSignUpForm,
     StaffVerificationForm
     )
-
+from .utils import check_academicgroup_staff
 from activities.models import Request
 # Create your views here.
 
@@ -46,6 +46,11 @@ def profile(request, username):
     # by the currently logged in user
     s_user_req = Request.objects.filter(user=request.user)
     requests = Request.objects.all()
-    context = {'requests':requests, 'specific':s_user_req}
+    academic_office_staff = check_academicgroup_staff(request)
+    context = {
+        'requests':requests, 'specific':s_user_req,
+        
+        'academic_office_staff':academic_office_staff
+        }
     return render(request, 'profile.html', context=context)
 
