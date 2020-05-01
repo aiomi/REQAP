@@ -2,6 +2,8 @@ from django.shortcuts import render, redirect
 from django.http import JsonResponse, HttpResponse
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+#from django.core import serializers
+#from django.core.serializers.json import DjangoJSONEncoder
 
 from .models import (
     TranscriptAttribute, Request, Transcript,
@@ -12,7 +14,10 @@ from users.models import Staff
 from .form import TranscriptRequestForm, NoteForm
 
 from users.decorators import (
-    user_is_student_or_acadoffice_staff, academic_office_staff_only)
+    user_is_student_or_acadoffice_staff, academic_office_staff_only
+    )
+
+import json
 # Create your views here.
 
 def homepage(request):
@@ -54,6 +59,29 @@ def view_request_transcript(request, pk):
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
 
+def get_valid_transcripts_requests(request):
+    """
+    valid here means all transcript requests that
+    payments have been made 
+    """
+    if request.is_ajax():
+        #limit request to the first 10
+        #ToDo add ordering to date_created
+        transcripts = dict()
+        r = Transcript.objects.filter(has_paid=True)[:10]
+        for i in range(len(r)):
+            for j in r:
+                print(i, j.transcript_type)
+                # TODO add matric number to json data
+                transcripts[i] = {
+                    'id': j.id,
+                    'transcript_type': j.transcript_type.transcript_type,
+                    'amount': j.amount,
+                    'address': j.address,
+                    'has_paid': j.has_paid,
+                    'request_by': j.request.user.get_full_name()
+                    }
+        return JsonResponse(transcripts)
 
 @login_required
 @academic_office_staff_only
