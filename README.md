@@ -21,3 +21,13 @@ A Multilevel request/approval system for institutions
 ``python manage.py migrate``
 
 ``python manage.py runserver``
+
+## Create Postgres User
+
+`sudo su postgres -c "psql -c \"CREATE USER reqap WITH PASSWORD 'reqap';\""`
+
+`sudo su postgres -c "psql -c \"CREATE DATABASE reqap_db OWNER reqap;\""`
+
+`sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis;\""`
+
+`sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis_topology;\""`

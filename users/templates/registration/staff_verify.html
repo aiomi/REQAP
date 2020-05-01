@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Verification
+{% endblock title%}
+
+{% block content %}
+<h2>Please upload required photos for verificaton </h2>
+
+Verification for {{request.user }}
+<form method="POST">
+    {% csrf_token %}
+    {{ form }}
+
+    <input type="submit" name="" id="" >
+</form>
+{% endblock content %}

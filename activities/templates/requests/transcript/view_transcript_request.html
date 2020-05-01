@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load static %}
+
+
+
+{% block title%}
+Transcript
+{% endblock title%}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock links %}
+
+{% block content %}
+{%if request.user == req.request.user%}
+Student
+<h2>Request for Transcript {{req.transcript_type}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+{%endif%}
+
+<!--check if staff is in academic group-->
+{%if request.user.is_teacher %}
+Staff
+<h2>Request for Transcript {{req.transcript_type}} by {{req.request.user.first_name}} {{req.request.user.last_name}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+<h2>approve and reject with possible reasons</h2>
+
+<div class="container modal-actions">
+<button class="btn btn-success mr-2" data-toggle="modal" data-target="#multiModal"> Approve </button>
+<button id="reject-btn" class="btn btn-danger ml-2" data-toggle="modal" data-target="#multiModal">
+    Reject
+</button>
+</div>
+<!--accept modal-->
+<!-- Button trigger modal -->
+  <!-- Modal -->
+  <div class="modal fade" id="multiModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Request for Transcript</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id="action_form" method="POST">
+              {% csrf_token %}
+              {{form}}
+              <input type="hidden" name="req_id" value="{{req.id}}">
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button type="button" id="action-submit" class="btn btn-success">submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <!-- endModal -->
+<!--accept modal ends-->
+
+{%endif%}
+
+{% endblock content %}
+
+{% block js%}
+<script>
+    $(document).ready(function() {
+        $('.modal-actions').click(function(event){
+            // e.preventDefault()
+            // let state = "Approved"
+            console.log(event.target.innerHTML)
+            if (event.target.innerHTML.includes('Approve')) {
+                $('#id_action').val('Approved');
+            }
+            else if(event.target.innerHTML.includes('Reject')){
+                $('#id_action').val('Rejected');
+            }
+        });
+
+        $('#action-submit').click(function(e){
+            e.preventDefault();
+            $.ajax({
+                type: "POST",
+                url: "{% url 'transcript-actions' %}",
+                data: $('#action_form').serialize(),
+                dataType: 'json',
+                cache: false,
+                400: function(){
+                    setTimeout(function(){
+                        alert('AN error occurred')
+                    }, 2000)
+                },
+                success: function(response){
+                    // handle successful submisson
+                    //edit to use toast of some sort
+                    setTimeout(function(){
+                        alert('Success')
+                    }, 1500);
+                }
+            });
+
+        });
+
+
+    })
+</script>
+{% endblock js %}

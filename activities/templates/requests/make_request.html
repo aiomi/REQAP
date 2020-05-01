@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title%}
+Make-{{ Title }}
+{% endblock title%}
+
+{% block content %}
+<form method="POST">
+    {% csrf_token %}
+    {{ form.as_p}}
+
+    <input type="submit" name="" id="" >
+</form>
+{% endblock content %}
+
+{% block js%}
+{% if "Transcript" in Title%}
+    <script>
+        $(document).ready(function(){
+           $('#id_transcript_type').on('change', function(){
+               // add loading field to get amount
+               var trans_type = $(this).find('option:selected').text()
+               console.log(trans_type);
+
+               setTimeout(function(){
+                
+                $.ajax({
+                   url: "/get-transcript-amount/",
+                   type: 'post',
+                //    data: trans_type,
+                   data : {
+                       'transcipt_type':trans_type,
+                       csrfmiddlewaretoken: $('input[name=csrfmiddlewaretoken]').val()
+                    },
+
+                   success : function(data){
+                       //remove loading animation
+                       $('#id_amount').val(data)
+                   }
+               });
+               },2000)
+           });
+
+        });
+    </script>
+{% endif%}
+{% endblock js%}
