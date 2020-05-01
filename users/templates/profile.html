@@ -24,16 +24,57 @@ User Profile
    {%endfor%}
 
 <!-- for staffs show requests of all users -->
-{% else%}
-<h2>
-   <!--TODO: make logic to allow only academic office users see this -->
-   For staffs only(In academic office)
-</h2>
-   {% for req in requests %}
-      {%if req.transcript%}
-      <a href="{% url 'view-request-transcript' req.transcript.id %}">{{req.transcript}}</a> 
-      {%endif%}
-   {%endfor%}
-{% endif %}
+{% endif%}
+
+<!-- only staffs in academic office can view transcript requests made by other users-->
+<div class="row">
+   {% if academic_office_staff %}
+   <div id="transcript" class="col-lg-4">
+   </div>
+   {%endif%}
+</div>
 
 {% endblock content %}
+
+{% block js%}
+<script>
+   "use strict";
+   $(document).ready(function(){
+      //"use strict";
+      function get_transcripts(){
+         return new Promise((resolve, reject) =>{
+            $.ajax({
+               url: '/valid-transcript-requests',
+               type: 'GET',
+               dataType:'json',
+
+               success: function(data){
+                  resolve(data)
+               },
+               error: function(data){
+                  reject(data)
+               }
+            });
+         })
+
+      }
+
+      get_transcripts()
+      .then(data =>{
+         let html_data = createHtmlData(data);
+         $('#transcript').append(html_data);
+      })
+      .catch(error => {
+         console.log(error)
+      })
+      
+      function createHtmlData(data){
+         let html_data = '';
+         for(let i=0; i<Object.keys(data).length; i++){
+            html_data+= `<a href='/view_request/${data[i]['id']}'>Transcript ${data[i]['transcript_type']} by ${data[i]['request_by']}</a>`;
+         }
+         return html_data
+      }
+   })
+</script>
+{%endblock%}
