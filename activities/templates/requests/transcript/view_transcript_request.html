@@ -18,6 +18,10 @@ Student
 <p>Has Paid: {{req.has_paid}}</p>
 <p>Amount: {{req.amount }} </p>
 <p>Address: {{req.address}}</p>
+<p>Status: {{req.status}}</p>
+<a class="btn btn-sm btn-outline-success" href="{%url 'transcript-payment' req.id %}">
+  Make Payment
+</a>
 {%endif%}
 
 <!--check if staff is in academic group-->
@@ -27,6 +31,7 @@ Staff
 <p>Has Paid: {{req.has_paid}}</p>
 <p>Amount: {{req.amount }} </p>
 <p>Address: {{req.address}}</p>
+<p>Status: {{req.status}}</p>
 <h2>approve and reject with possible reasons</h2>
 
 <div class="container modal-actions">
