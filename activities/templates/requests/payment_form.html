@@ -1,0 +1,37 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title%}
+Pay
+{% endblock title%}
+
+{% block links %}
+<link rel="stylesheet" href="{% static 'css/custom.css' %}">
+{% endblock links %}
+
+{% block content %}
+{%if request.user == req.request.user%}
+
+<h2>Request for Transcript {{req.transcript_type}}</h2> 
+<p>Has Paid: {{req.has_paid}}</p>
+<p>Amount: {{req.amount }} </p>
+<p>Address: {{req.address}}</p>
+
+<div class="mt-3">
+    <form method="POST" >
+        {% csrf_token %}
+        <script
+          src="https://js.paystack.co/v1/inline.js" 
+          data-key="{{paystack.public_key}}"
+          data-email="{{paystack.email}}"
+          data-amount="{{paystack.amount}}"
+          data-ref="{{paystack.reference}}"
+          data-currency="NGN"
+        >
+        </script>
+      </form>
+      
+</div>
+{%endif%}
+
+{% endblock content %}

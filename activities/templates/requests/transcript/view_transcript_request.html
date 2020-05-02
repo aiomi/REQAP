@@ -18,6 +18,10 @@ Student
 <p>Has Paid: {{req.has_paid}}</p>
 <p>Amount: {{req.amount }} </p>
 <p>Address: {{req.address}}</p>
+<p>Status: {{req.status}}</p>
+<a class="btn btn-sm btn-outline-success" href="{%url 'transcript-payment' req.id %}">
+  Make Payment
+</a>
 {%endif%}
 
 <!--check if staff is in academic group-->
@@ -27,6 +31,7 @@ Staff
 <p>Has Paid: {{req.has_paid}}</p>
 <p>Amount: {{req.amount }} </p>
 <p>Address: {{req.address}}</p>
+<p>Status: {{req.status}}</p>
 <h2>approve and reject with possible reasons</h2>
 
 <div class="container modal-actions">
@@ -77,14 +82,17 @@ Staff
             console.log(event.target.innerHTML)
             if (event.target.innerHTML.includes('Approve')) {
                 $('#id_action').val('Approved');
+                $('#id_action').prop('readonly', true);
             }
             else if(event.target.innerHTML.includes('Reject')){
-                $('#id_action').val('Rejected');
+                $('#id_action').val('Denied');
+                $('#id_action').prop('readonly', true);
             }
         });
 
         $('#action-submit').click(function(e){
             e.preventDefault();
+            $('#modal').modal('toggle');
             $.ajax({
                 type: "POST",
                 url: "{% url 'transcript-actions' %}",
@@ -93,14 +101,13 @@ Staff
                 cache: false,
                 400: function(){
                     setTimeout(function(){
-                        alert('AN error occurred')
+
                     }, 2000)
                 },
                 success: function(response){
                     // handle successful submisson
                     //edit to use toast of some sort
                     setTimeout(function(){
-                        alert('Success')
                     }, 1500);
                 }
             });

@@ -12,5 +12,7 @@ urlpatterns = [
         views.get_valid_transcripts_requests,name='valid-transcript-requests'
         ),
     path('view_request/<int:pk>', views.view_request_transcript, name='view-request-transcript'),
+    path('transcript-payment/<int:pk>', views.pay_for_transcript, name='transcript-payment'),
+    
     re_path('transcript_actions/<int:pk>/$', views.respond_to_transcript_request, name='transcript-actions'),
 ]

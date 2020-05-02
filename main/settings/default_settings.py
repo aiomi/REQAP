@@ -23,3 +23,8 @@ DATABASES = {
 
 # email settings 
 EMAIL_BACKEND ='django.core.mail.backends.console.EmailBackend'
+
+PAYSTACK_PUBLIC_KEY = os.environ.get('PAYSTACK_PUBLIC_KEY')
+
+PAYSTACK_SECRET_KEY = os.environ.get('PAYSTACK_SECRET_KEY')
+PAYSTACK_EMAIL = os.environ.get('PAYSTACK_EMAIL')
