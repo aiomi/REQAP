@@ -1,5 +1,6 @@
 import os
 from .common import *
+import django_heroku
 
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY')
 
@@ -20,3 +21,6 @@ ALLOWED_HOSTS = []
 #         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #     }
 # }
+
+
+django_heroku.settings(locals())
