@@ -1,0 +1,19 @@
+language: python
+sudo: required
+python:
+- '3.6'
+branches:
+  only:
+  - master
+install:
+- pip install -r requirements.txt
+script:
+- python manage.py --help
+deploy:
+  provider: heroku
+  api_key: "$HEROKU_API_KEY"
+  app: "$HEROKU_APP_NAME"
+
+# env:
+#   global:
+#     secure: Ay+6tF3gxijYMVqIhTt22l29Re/SlPNgSJb88Wqm+Vf91YXU5D03ZvoBnAmxVe79W7NWuguxHRWKMivQbyIaqQcDGzV+0ngY3yb61Rec0pZ8cXKMWRKToKzLKmeXogHwiZWtd8Y1Enokw1Bo7jJLN7YDoD9UQ1X/fTKWEvKjMx0N+8UbFmODYemJsOyMQtDiiq2dld8nbD+b0pxtIQVXZWzhniMtPgMw0461ULjtqiohhehpdMvHwph1rCtE2WgZa6ssygMlMDMP/l2KyimsjlbVdQecwhy4ZeAkCtHbIzkQz5/ciZe/0OplaTvKh8RGZDLs+B/uud6MgpEWa4XtBj0ER3NbKBvG1krFoHLsR/CYBSq7vsj9RBRqAFe6JoVo50LpmcXNEsw8wv0cRprPs9aDb6D5gQ/TeJQp0TDuSYuDe+yWd2MSeM+V41npeZrCDoDIHDPweDl10L8B6GAGaqXUB5258X/yIlUZJppp//jihS+ncmSLC6V7bEISGj2MAz/NLbCV6XG5q4rI9yQH8eL1bAvoYaykoa4T8y1LRaZMhnZwKKzrglPCWP/u9R5cndeezhnr4XodyITXQfMk0JkfrIAvsbC1EvL1CyI1Ss2n0buXEJNM4KyxILKlQtp/Wd9/SyL6z80uJ5qSF1ytqGYdT1xJJxLCdx0acZbrIzI=
