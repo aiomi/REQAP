@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect, reverse
-
+from django.contrib.auth.decorators import login_required
+from users.decorators import teacher_required
 from .forms import LeaveForm
 from .models import Leave
 # Create your views here.
 
 
+@teacher_required
+@login_required
 def apply_for_leave(request):
     form = LeaveForm()
     if request.method=="POST":
