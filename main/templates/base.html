@@ -104,7 +104,7 @@
                 <li> <a href="{% url 'logout' %}"> <i class="fa fa-sign-out"> </i>Logout</a></li>
               {%else%}
               
-                <li> <a href="{% url 'register' %}"> <i class="fa fa-register"> </i>Register</a></li>
+                <li> <a href="{% url 'register' %}"> <i class="fa fa-user-plus"> </i>Register</a></li>
                 <li> <a href="{% url 'login' %}"> <i class="fa fa-sign-in"> </i>Login</a></li>
               {% endif %} 
           </ul>
@@ -158,6 +158,33 @@
           </div>
         </nav>
       </header>
+            <!-- Breadcrumb-->
+            <div class="breadcrumb-holder">
+              <div class="container-fluid">
+                <ul class="breadcrumb">
+                  <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                  <li class="breadcrumb-item active">{{title}}</li>
+                </ul>
+              </div>
+            </div>
+            <!--end of Breadcrumb-->
+            
+            <!--alerts-->
+            {% if messages %}
+            <div class="mt-3 container">
+              {% for message in messages %}
+              <div class="w-75 ml-3 ml-auto">
+                <div class="alert alert-{{ message.tags}} alert-dismissible fade show" role="alert">
+                  {{ message }}
+                  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+              </div>
+              {% endfor %}
+            </div>
+            {%endif%}
+            
       <div class="container">
           {% block content%}
           {% endblock content%}
