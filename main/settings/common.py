@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'users',
     'main',
     'leave',
+    'crispy_forms',
 ]
 
 MIDDLEWARE = [
@@ -125,3 +126,5 @@ LOGOUT_REDIRECT_URL = 'homepage'
 TEACHER_SIGNUP_SUBJECT = "Sign Up as Teacher Successful"
 
 ADMIN_EMAIL_USER = 'Greatness@gmail.com'
+
+CRISPY_TEMPLATE_PACK = 'bootstrap4'
