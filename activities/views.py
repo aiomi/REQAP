@@ -50,6 +50,8 @@ def get_transcript_amount(request):
     raise SuspiciousOperation()
 
 @login_required
+# TODO change decorator to user or acadoffice staff because staffs can request
+# for transcripts to
 @user_is_student_or_acadoffice_staff
 def view_request_transcript(request, pk):
     req = Transcript.objects.get(pk=pk)
@@ -93,7 +95,7 @@ def pay_for_transcript(request, pk):
         messages.error(request, 'Transaction unsuccessful. Please try again later.')
     
     return render(
-        request, 'requests/payment_form.html',
+        request, 'requests/transcript/transcript_payment_form.html',
         context=context)
 
 
