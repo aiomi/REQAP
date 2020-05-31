@@ -28,3 +28,7 @@
     width: 280px;
 }
 
+.leave-page .logo, .register-page .logo {
+    font-size: 2em;
+    font-weight: 500;
+}
