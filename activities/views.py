@@ -37,7 +37,7 @@ def request_transcripts(request):
             messages.success(request, 'Your request for Transcript has been successful')
             return redirect('homepage')
     form = TranscriptRequestForm(None)
-    context = {'Title':"Transcript Request", 'form':form}
+    context = {'title':"Transcript Request", 'form':form}
     return render(request, 'requests/make_request.html', context=context)
 
 
@@ -54,7 +54,7 @@ def get_transcript_amount(request):
 def view_request_transcript(request, pk):
     req = Transcript.objects.get(pk=pk)
     form = NoteForm()
-    context = {'req':req, 'form':form}
+    context = {'req':req, 'form':form, 'title':'View Transcript Request'}
     return render(
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
@@ -76,7 +76,8 @@ def pay_for_transcript(request, pk):
     
     context = {
         'req':req,
-        'paystack': paystack
+        'paystack': paystack,
+        'title':'Transcript Payment'
         }
 
     # process payment

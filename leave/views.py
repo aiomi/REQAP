@@ -15,5 +15,5 @@ def apply_for_leave(request):
         if form.is_valid():
             form = LeaveForm(request.POST or None)
             form.save()
-    context = {'form':form}
+    context = {'form':form, 'title': 'Apply for leave'}
     return render(request, 'leave.html', context=context)

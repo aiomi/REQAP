@@ -2,7 +2,7 @@
 {% load crispy_forms_tags %}
 
 {% block title%}
-Make-{{ Title }}
+Make-{{ title }}
 {% endblock title%}
 
 {% block content %}
@@ -24,6 +24,7 @@ Make-{{ Title }}
 {% endblock content %}
 
 {% block js%}
+
 {% if "Transcript" in Title%}
     <script>
         $(document).ready(function(){
