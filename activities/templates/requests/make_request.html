@@ -1,16 +1,26 @@
 {% extends 'base.html' %}
+{% load crispy_forms_tags %}
 
 {% block title%}
 Make-{{ Title }}
 {% endblock title%}
 
 {% block content %}
-<form method="POST">
-    {% csrf_token %}
-    {{ form.as_p}}
-
-    <input type="submit" name="" id="" >
-</form>
+<div class="login-page">
+<div class="form-outer text-center">
+    <div class="form-inner">
+        <div class="logo text-uppercase">
+            <span>Request</span><strong class="text-primary"> Transcript</strong>
+        </div>
+        <form method="POST">
+            {% csrf_token %}
+            {{ form|crispy}}
+        
+            <input type="submit" name="" id="" class="btn btn-sm btn-primary" >
+        </form>
+    </div>
+</div>
+</div>
 {% endblock content %}
 
 {% block js%}
