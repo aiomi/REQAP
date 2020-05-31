@@ -38,7 +38,7 @@ def request_transcripts(request):
             return redirect('homepage')
     form = TranscriptRequestForm(None)
     context = {'title':"Transcript Request", 'form':form}
-    return render(request, 'requests/make_request.html', context=context)
+    return render(request, 'requests/transcript/make_transcript_request.html', context=context)
 
 
 def get_transcript_amount(request):

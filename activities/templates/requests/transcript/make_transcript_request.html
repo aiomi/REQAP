@@ -24,8 +24,7 @@ Make-{{ title }}
 {% endblock content %}
 
 {% block js%}
-
-{% if "Transcript" in Title%}
+{{block.super }}
     <script>
         $(document).ready(function(){
            $('#id_transcript_type').on('change', function(){
@@ -54,5 +53,4 @@ Make-{{ title }}
 
         });
     </script>
-{% endif%}
 {% endblock js%}
