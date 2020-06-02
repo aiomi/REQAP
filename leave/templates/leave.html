@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% load custom_filters %}
+
+{% block title%}
+Apply for Leave
+{% endblock title%}
+
+{% block content %}
+{{ form.media.css }}
+
+<style>
+    /* .selector {
+        width: 400px;
+        float: none;
+    } */
+    .selector select {
+        width: 280px;
+        height: 12.2em;
+    }
+    .selector .selector-available input {
+        width: 220px;
+        margin-left: 8px;
+    }
+    .selector .selector-filter {
+        padding: 8px;
+        color: #999;
+        font-size: 10px;
+        margin: 0;
+        text-align: left;
+    }
+    .selector-available, .selector-chosen {
+        /* float: left; */
+        width: 280px;
+        /* text-align: center; */
+        /* margin-bottom: 5px; */
+    }
+    .selector .selector-available h2 {
+        font-size: 0.9em;
+    }
+.selector-chosen h2 {
+    font-family: "Roboto", sans-serif;
+    background: #33b35a !important;
+    color: #fff;
+    font-size: 0.9em;
+    }
+</style>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.css">
+<div class="leave-page">
+    <div class="form-outer text-center">
+        <div class="form-inner w-80">
+            <div class="logo text-uppercase">
+                <span>Request</span><strong class="text-primary"> Leave</strong>
+            </div>
+
+            <form method="POST">
+                {% csrf_token %}
+                <div class="form-row">
+                    <div class="col-md-12">
+                        {{ form.leave_type.label}}
+                        {{ form.leave_type|add_class:'form-control'}}        
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class=" form-group col-md-6">
+                        {{ form.start_date.label}}
+                        {{ form.start_date|add_class:'form-control datepicker'}}        
+                    </div>
+                    <div class=" form-group col-md-6">
+                        {{ form.end_date.label}}
+                        {{ form.end_date|add_class:'form-control datepicker'}}
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-12">
+                        {{ form.reason.label}}
+                        {{ form.reason|add_class:'form-control'}}
+                    
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        {{ form.leave_processor.label}}
+                        {{ form.leave_processor}}
+                    </div>
+                </div>
+
+
+                <input type="submit" name="" id="" class="btn btn-sm btn-primary" >
+            </form>
+        </div>
+    </div>
+    </div>
+
+{% endblock content %}
+
+{% block js%}
+{{block.super}}
+{{form.media.js}}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js">
+</script>
+<script>
+    $(document).ready(function(){
+        $('.datepicker').datepicker();
+    })
+</script>
+{% endblock js%}

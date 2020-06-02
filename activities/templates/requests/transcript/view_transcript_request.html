@@ -74,6 +74,7 @@ Staff
 {% endblock content %}
 
 {% block js%}
+{{ block.super }}
 <script>
     $(document).ready(function() {
         $('.modal-actions').click(function(event){

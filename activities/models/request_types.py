@@ -53,8 +53,5 @@ class Transcript(models.Model):
     def __str__(self):
         return f'Transcript {self.transcript_type} by {self.request.user}'
 
-class Leave(models.Model):
-    pass
-
 class ResultRemarking(models.Model):
     pass

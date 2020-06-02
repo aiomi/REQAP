@@ -37,8 +37,8 @@ def request_transcripts(request):
             messages.success(request, 'Your request for Transcript has been successful')
             return redirect('homepage')
     form = TranscriptRequestForm(None)
-    context = {'Title':"Transcript Request", 'form':form}
-    return render(request, 'requests/make_request.html', context=context)
+    context = {'title':"Transcript Request", 'form':form}
+    return render(request, 'requests/transcript/make_transcript_request.html', context=context)
 
 
 def get_transcript_amount(request):
@@ -50,11 +50,13 @@ def get_transcript_amount(request):
     raise SuspiciousOperation()
 
 @login_required
+# TODO change decorator to user or acadoffice staff because staffs can request
+# for transcripts to
 @user_is_student_or_acadoffice_staff
 def view_request_transcript(request, pk):
     req = Transcript.objects.get(pk=pk)
     form = NoteForm()
-    context = {'req':req, 'form':form}
+    context = {'req':req, 'form':form, 'title':'View Transcript Request'}
     return render(
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
@@ -76,7 +78,8 @@ def pay_for_transcript(request, pk):
     
     context = {
         'req':req,
-        'paystack': paystack
+        'paystack': paystack,
+        'title':'Transcript Payment'
         }
 
     # process payment
@@ -92,7 +95,7 @@ def pay_for_transcript(request, pk):
         messages.error(request, 'Transaction unsuccessful. Please try again later.')
     
     return render(
-        request, 'requests/payment_form.html',
+        request, 'requests/transcript/transcript_payment_form.html',
         context=context)
 
 
