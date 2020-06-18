@@ -14,13 +14,11 @@ User Profile
 <hr>
 <h3>View requests</h3>
 <hr>
-
-<!--for none staffs show all the particular user requests-->
-{% if not request.user.is_teacher %}
+<div class="container">
+   {% if not request.user.is_teacher %}
    {% for req in specific %}
-      {%if req.transcript%}
-      <a href="{% url 'view-request-transcript' req.transcript.id %}">{{req.transcript}}</a> 
-      {%endif%}
+   {{req.transcript}}
+      <a href="{% url 'view-request-transcript' req.id %}">{{req}}</a> 
    {%endfor%}
 
 <!-- for staffs show requests of all users -->
@@ -33,10 +31,14 @@ User Profile
    </div>
    {%endif%}
 </div>
+</div>
+<!--for none staffs show all the particular user requests-->
+
 
 {% endblock content %}
 
 {% block js%}
+{{block.super }}
 <script>
    "use strict";
    $(document).ready(function(){

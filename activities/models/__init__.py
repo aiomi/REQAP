@@ -1,5 +1,5 @@
 from .request_types import (
-    Request, Transcript, TranscriptAttribute
+    Transcript, TranscriptAttribute
     )
 
-from .rnotes import Note
+from .rnotes import TranscriptNote

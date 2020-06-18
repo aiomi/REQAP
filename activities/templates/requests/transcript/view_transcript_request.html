@@ -12,26 +12,29 @@ Transcript
 {% endblock links %}
 
 {% block content %}
-{%if request.user == req.request.user%}
+{%if request.user == transcript_request.request_by%}
 Student
-<h2>Request for Transcript {{req.transcript_type}}</h2> 
-<p>Has Paid: {{req.has_paid}}</p>
-<p>Amount: {{req.amount }} </p>
-<p>Address: {{req.address}}</p>
-<p>Status: {{req.status}}</p>
-<a class="btn btn-sm btn-outline-success" href="{%url 'transcript-payment' req.id %}">
-  Make Payment
-</a>
+<h2>Request for Transcript {{transcript_request.transcript_type}}</h2> 
+<p>Has Paid: {{transcript_request.has_paid}}</p>
+<p>Amount: {{transcript_request.amount }} </p>
+<p>Address: {{transcript_request.address}}</p>
+<p>Status: {{transcript_request.status}}</p>
+  {%if transcript_request.has_paid %}
+  {%else%}
+    <a class="btn btn-sm btn-outline-success" href="{%url 'transcript-payment' transcript_request.id %}">
+      Make Payment
+    </a>
+  {%endif%}
 {%endif%}
 
 <!--check if staff is in academic group-->
 {%if request.user.is_teacher %}
 Staff
-<h2>Request for Transcript {{req.transcript_type}} by {{req.request.user.first_name}} {{req.request.user.last_name}}</h2> 
-<p>Has Paid: {{req.has_paid}}</p>
-<p>Amount: {{req.amount }} </p>
-<p>Address: {{req.address}}</p>
-<p>Status: {{req.status}}</p>
+<h2>Request for Transcript {{transcript_request.transcript_type}} by {{transcript_request.request_by.first_name}} {{transcript_request.request_by.last_name}}</h2> 
+<p>Has Paid: {{transcript_request.has_paid}}</p>
+<p>Amount: {{transcript_request.amount }} </p>
+<p>Address: {{transcript_request.address}}</p>
+<p>Status: {{transcript_request.status}}</p>
 <h2>approve and reject with possible reasons</h2>
 
 <div class="container modal-actions">
@@ -56,12 +59,12 @@ Staff
           <form id="action_form" method="POST">
               {% csrf_token %}
               {{form}}
-              <input type="hidden" name="req_id" value="{{req.id}}">
+              <input type="hidden" name="req_id" value="{{transcript_request.id}}">
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-          <button type="button" id="action-submit" class="btn btn-success">submit</button>
+          <button type="button" id="action-submit" class="btn btn-success" data-dismiss="modal">submit</button>
         </div>
       </div>
     </div>
@@ -109,6 +112,7 @@ Staff
                     // handle successful submisson
                     //edit to use toast of some sort
                     setTimeout(function(){
+                      window.location.reload()
                     }, 1500);
                 }
             });
