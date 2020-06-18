@@ -50,7 +50,6 @@ def profile(request, username):
     # s_user_req means specific user requests which is all the request made
     # by the currently logged in user
     transcript = Transcript.objects.filter(request_by=request.user)
-    print(transcript)
     academic_office_staff = check_academicgroup_staff(request)
     context = {
         'specific':transcript,

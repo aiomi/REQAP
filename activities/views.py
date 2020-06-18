@@ -51,7 +51,7 @@ def get_transcript_amount(request):
 @login_required
 # TODO change decorator to user or acadoffice staff because staffs can request
 # for transcripts to
-@user_is_student_or_acadoffice_staff
+#@user_is_student_or_acadoffice_staff
 def view_request_transcript(request, pk):
     transcript_request = Transcript.objects.get(pk=pk)
     form = NoteForm()
@@ -108,6 +108,8 @@ def get_valid_transcripts_requests(request):
         #ToDo add ordering to date_created
         transcripts = dict() 
         r = Transcript.objects.filter(status=TranscriptStatus.PAID)[:10]
+        print('getting rs:')
+        print(r)
         for i in range(len(r)):
             for j in r:
                 # TODO add matric number to json data
@@ -131,17 +133,16 @@ def respond_to_transcript_request(request):
     """
     if request.is_ajax() and request.method == "POST":
         
-        #request_instance = Request.objects.get(id=int(request.POST.get('req_id')))
+        transcript_instance = Transcript.objects.get(id=int(request.POST.get('req_id')))
         staff_instance = Staff.objects.get(id = request.user.staff.id)
-        Transcript.objects.create(
-            request= request_instance,
+        TranscriptNote.objects.create(
+            transcript= transcript_instance,
             action = request.POST.get('action'),
             reason = request.POST.get('reason'),
             staff_id = staff_instance
         )
-        transcript = Transcript.objects.get(request=request_instance)
-        transcript.status = request.POST.get('action').lower()
-        transcript.approved_by = staff_instance
-        transcript.save()
+        transcript_instance.status = request.POST.get('action').lower()
+        transcript_instance.approved_by = staff_instance
+        transcript_instance.save()
         return JsonResponse(data={'response':'successful'})
     
