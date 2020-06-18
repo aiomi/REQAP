@@ -6,9 +6,8 @@ from .models import Leave
 # Create your views here.
 
 
-
-@login_required
 @teacher_required
+@login_required
 def apply_for_leave(request):
     form = LeaveForm()
     if request.method=="POST":
