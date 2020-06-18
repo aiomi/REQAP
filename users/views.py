@@ -7,8 +7,9 @@ from .forms import (
     UserRegistrationForm, TeacherSignUpForm,
     StaffVerificationForm
     )
+from activities.models import Transcript
 from .utils import check_academicgroup_staff
-from activities.models import Request
+#from activities.models import Request
 # Create your views here.
 
 
@@ -48,11 +49,11 @@ class StaffVerificationView(CreateView):
 def profile(request, username):
     # s_user_req means specific user requests which is all the request made
     # by the currently logged in user
-    s_user_req = Request.objects.filter(user=request.user)
-    requests = Request.objects.all()
+    transcript = Transcript.objects.filter(request_by=request.user)
+    print(transcript)
     academic_office_staff = check_academicgroup_staff(request)
     context = {
-        'requests':requests, 'specific':s_user_req,
+        'specific':transcript,
         
         'academic_office_staff':academic_office_staff
         }
