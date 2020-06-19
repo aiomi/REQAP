@@ -6,18 +6,6 @@ from users.models import User, Staff
 from libs.constants import TranscriptStatus
 # Create your models here.
 
-
-class Request(models.Model):
-    # state = (
-    #     ('initiated','Initiated'),
-    #     ('')
-    #     )
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date_created = models.DateTimeField(default=timezone.now)
-
-    def __str__(self):
-        return f'Request by {self.user}'
-
 class TranscriptAttribute(models.Model):
     transcript_type = models.CharField(max_length=20)
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
@@ -36,12 +24,11 @@ class Transcript(models.Model):
         (TranscriptStatus.APPROVED,'Approved'),
         (TranscriptStatus.DENIED, 'Denied')
         )
-
+    request_by = models.ForeignKey(User, on_delete=models.CASCADE, blank=True, null=True)
     transcript_type = models.OneToOneField(TranscriptAttribute, on_delete=models.DO_NOTHING)
     amount = models.DecimalField(max_digits=8, decimal_places=2, default=0.00)
     requires_payment = models.BooleanField(default=True)
     address = models.CharField(max_length=200, null=True)
-    request = models.OneToOneField(Request, on_delete=models.CASCADE, null=True, blank=True)
     has_paid = models.BooleanField(default=False)
     status = models.CharField(max_length=10, choices=status_choices, default=TranscriptStatus.INITIATED)
     approved_by = models.OneToOneField(Staff, on_delete=models.CASCADE, blank=True,null=True)
@@ -51,7 +38,7 @@ class Transcript(models.Model):
         ]
 
     def __str__(self):
-        return f'Transcript {self.transcript_type} by {self.request.user}'
+        return f'Transcript {self.transcript_type} by {self.request_by}'
 
 class ResultRemarking(models.Model):
     pass

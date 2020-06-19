@@ -10,7 +10,7 @@ Pay
 {% endblock links %}
 
 {% block content %}
-{%if request.user == req.request.user%}
+{%if request.user == transcript_request.request_by%}
 
 <h2>Request for Transcript {{req.transcript_type}}</h2> 
 <p>Has Paid: {{req.has_paid}}</p>

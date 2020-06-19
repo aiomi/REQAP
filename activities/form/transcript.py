@@ -6,4 +6,4 @@ class TranscriptRequestForm(forms.ModelForm):
 
     class Meta:
         model = Transcript
-        exclude =['has_paid', 'requires_payment', 'request', 'approved_by', 'status']
+        exclude =['has_paid', 'requires_payment', 'request', 'approved_by', 'status', 'request_by']

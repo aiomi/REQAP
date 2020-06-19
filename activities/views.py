@@ -1,3 +1,4 @@
+# pylint:disable =no-member
 from django.shortcuts import render, redirect, reverse
 from django.conf import settings
 from django.db import transaction
@@ -7,8 +8,8 @@ from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_protect
 from django.contrib import messages
 from .models import (
-    TranscriptAttribute, Request, Transcript,
-    Note
+    TranscriptAttribute, Transcript,
+    TranscriptNote
     )
 from users.models import Staff
 from .form import TranscriptRequestForm, NoteForm
@@ -28,12 +29,10 @@ def request_transcripts(request):
     if request.method == "POST":
         form = TranscriptRequestForm(request.POST or None)
         if form.is_valid():
-            req = form.save(commit=False)
-            _ = Request.objects.create(user = request.user)
-            req.request = _
-            req.status = TranscriptStatus.INITIATED
-            #req.request.user = request.user
-            req.save()
+            trans_request = form.save(commit=False)
+            trans_request.status = TranscriptStatus.INITIATED
+            trans_request.request_by = request.user
+            trans_request.save()
             messages.success(request, 'Your request for Transcript has been successful')
             return redirect('homepage')
     form = TranscriptRequestForm(None)
@@ -52,11 +51,11 @@ def get_transcript_amount(request):
 @login_required
 # TODO change decorator to user or acadoffice staff because staffs can request
 # for transcripts to
-@user_is_student_or_acadoffice_staff
+#@user_is_student_or_acadoffice_staff
 def view_request_transcript(request, pk):
-    req = Transcript.objects.get(pk=pk)
+    transcript_request = Transcript.objects.get(pk=pk)
     form = NoteForm()
-    context = {'req':req, 'form':form, 'title':'View Transcript Request'}
+    context = {'transcript_request':transcript_request, 'form':form, 'title':'View Transcript Request'}
     return render(
         request, 'requests/transcript/view_transcript_request.html',
         context=context)
@@ -68,7 +67,7 @@ def pay_for_transcript(request, pk):
     """
     processes transcript payments. Payments are processed and verified through paystack
     """
-    req = Transcript.objects.get(pk=pk)
+    transcript = Transcript.objects.get(pk=pk)
     try:
         paystack = PaystackAccount(
             settings.PAYSTACK_EMAIL, settings.PAYSTACK_PUBLIC_KEY, req.amount
@@ -77,7 +76,7 @@ def pay_for_transcript(request, pk):
         pass
     
     context = {
-        'req':req,
+        'transcript_request':transcript,
         'paystack': paystack,
         'title':'Transcript Payment'
         }
@@ -86,9 +85,9 @@ def pay_for_transcript(request, pk):
     if request.method == "POST":
         if paystack.verify_transcation(request.POST['reference']):
             # change request to paid, status to paid then save it
-            req.status = TranscriptStatus.PAID
-            req.has_paid = True
-            req.save()
+            transcript.status = TranscriptStatus.PAID
+            transcript.has_paid = True
+            transcript.save()
             messages.success(request, "Your payment was successful. It will now be attended to by the required personnel.")
             return redirect(reverse('user-profile',kwargs={'username':request.user}))
         
@@ -109,6 +108,8 @@ def get_valid_transcripts_requests(request):
         #ToDo add ordering to date_created
         transcripts = dict() 
         r = Transcript.objects.filter(status=TranscriptStatus.PAID)[:10]
+        print('getting rs:')
+        print(r)
         for i in range(len(r)):
             for j in r:
                 # TODO add matric number to json data
@@ -118,7 +119,7 @@ def get_valid_transcripts_requests(request):
                     'amount': j.amount,
                     'address': j.address,
                     'has_paid': j.has_paid,
-                    'request_by': j.request.user.get_full_name()
+                    'request_by': j.request_by.get_full_name()
                     }
         return JsonResponse(transcripts)
     raise SuspiciousOperation()
@@ -132,17 +133,16 @@ def respond_to_transcript_request(request):
     """
     if request.is_ajax() and request.method == "POST":
         
-        request_instance = Request.objects.get(id=int(request.POST.get('req_id')))
+        transcript_instance = Transcript.objects.get(id=int(request.POST.get('req_id')))
         staff_instance = Staff.objects.get(id = request.user.staff.id)
-        Note.objects.create(
-            request= request_instance,
+        TranscriptNote.objects.create(
+            transcript= transcript_instance,
             action = request.POST.get('action'),
             reason = request.POST.get('reason'),
             staff_id = staff_instance
         )
-        transcript = Transcript.objects.get(request=request_instance)
-        transcript.status = request.POST.get('action').lower()
-        transcript.approved_by = staff_instance
-        transcript.save()
+        transcript_instance.status = request.POST.get('action').lower()
+        transcript_instance.approved_by = staff_instance
+        transcript_instance.save()
         return JsonResponse(data={'response':'successful'})
     
