@@ -89,7 +89,7 @@ def pay_for_transcript(request, pk):
             transcript.has_paid = True
             transcript.save()
             messages.success(request, "Your payment was successful. It will now be attended to by the required personnel.")
-            return redirect(reverse('user-profile',kwargs={'username':request.user}))
+            return redirect(reverse('user-profile'))
         
         messages.error(request, 'Transaction unsuccessful. Please try again later.')
     
