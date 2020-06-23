@@ -7,13 +7,15 @@ from django.template import loader
 from django import forms
 from django.core.mail import send_mail
 from .models import User, Staff, StaffVerification
+from .mixins import StudentRegFormMixin, EmailMixin
 
-
-class UserRegistrationForm(UserCreationForm):
+class UserRegistrationForm(UserCreationForm, StudentRegFormMixin, EmailMixin):
     faculty = (
         ('sict','SICT'),
         ('set','SET'),
     )
+    username = forms.CharField(max_length=25, widget=forms.TextInput(
+            attrs={'placeholder': 'Matriculation Number'}))
     faculty = forms.ChoiceField(choices=faculty)
     
     department = forms.CharField(
@@ -23,6 +25,7 @@ class UserRegistrationForm(UserCreationForm):
             )
         )
     email = forms.EmailField()
+
 
     class Meta:
         model = User
