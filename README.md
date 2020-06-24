@@ -31,3 +31,7 @@ A Multilevel request/approval system for institutions
 `sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis;\""`
 
 `sudo su postgres -c "psql -d reqap_db -c \"CREATE EXTENSION IF NOT EXISTS postgis_topology;\""`
+
+### run celery
+
+`celery -A main worker -B -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler`
