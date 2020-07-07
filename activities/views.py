@@ -1,5 +1,6 @@
 # pylint:disable =no-member
 from django.shortcuts import render, redirect, reverse
+from django.contrib.sites.shortcuts import get_current_site
 from django.conf import settings
 from django.db import transaction
 from django.core.exceptions import SuspiciousOperation
@@ -18,6 +19,7 @@ from users.decorators import (
     )
 from libs.paystack_api import PaystackAccount
 from libs.constants import TranscriptStatus
+from activities.tasks import transcript_mail_flow
 # Create your views here.
 
 def homepage(request):
@@ -70,7 +72,7 @@ def pay_for_transcript(request, pk):
     transcript = Transcript.objects.get(pk=pk)
     try:
         paystack = PaystackAccount(
-            settings.PAYSTACK_EMAIL, settings.PAYSTACK_PUBLIC_KEY, req.amount
+            settings.PAYSTACK_EMAIL, settings.PAYSTACK_PUBLIC_KEY, transcript.amount
             )
     except TranscriptAttribute.DoesNotExist:
         pass
@@ -80,7 +82,8 @@ def pay_for_transcript(request, pk):
         'paystack': paystack,
         'title':'Transcript Payment'
         }
-
+    domain = get_current_site(request).domain
+    print(domain)
     # process payment
     if request.method == "POST":
         if paystack.verify_transcation(request.POST['reference']):
@@ -88,8 +91,9 @@ def pay_for_transcript(request, pk):
             transcript.status = TranscriptStatus.PAID
             transcript.has_paid = True
             transcript.save()
+            transcript_mail_flow.delay(request.user.pk, domain, transcript.pk)
             messages.success(request, "Your payment was successful. It will now be attended to by the required personnel.")
-            return redirect(reverse('user-profile',kwargs={'username':request.user}))
+            return redirect(reverse('user-profile'))
         
         messages.error(request, 'Transaction unsuccessful. Please try again later.')
     

@@ -23,7 +23,7 @@ urlpatterns = [
         views.StaffVerificationView.as_view(),
         name='staff-verification'
         ),
-    path('dashboard/<str:username>', views.profile, name='user-profile')
+    path('dashboard/', views.profile, name='user-profile')
 
 ]
 

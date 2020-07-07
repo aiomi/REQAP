@@ -17,8 +17,9 @@ def register(request):
     form = UserRegistrationForm()
     if request.method == 'POST':
         form = UserRegistrationForm(request.POST or None)
-        form.save()
-        return redirect('login')
+        if form.is_valid():
+            form.save()
+            return redirect('login')
     context = {'form':form, 'title': 'Student'}
     return render(request, 'registration/register.html', context=context)
 
@@ -46,7 +47,7 @@ class StaffVerificationView(CreateView):
         return redirect('homepage')
 
 @login_required
-def profile(request, username):
+def profile(request):
     # s_user_req means specific user requests which is all the request made
     # by the currently logged in user
     transcript = Transcript.objects.filter(request_by=request.user)

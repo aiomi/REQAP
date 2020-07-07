@@ -5,7 +5,8 @@ from PIL import Image
 # Create your models here.
 
 class User(AbstractUser):
-    
+    username = models.CharField(max_length=20, blank=False, null = False, unique=True)
+    #matric_number = 
     faculty = models.CharField(max_length=12, blank=True, null=True)
     department = models.CharField(max_length=20, blank=True, null=True)
 
